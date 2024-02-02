@@ -25,10 +25,11 @@ namespace net
         EpollPoller(EventLoop *loop);
         ~EpollPoller() override;
 
-        Timestamp* poll(int timeoutMs, ChannelList* activeChannels) override;
+        Timestamp poll(int timeoutMs, ChannelList* activeChannels) override;
         void updateChannel(Channel* channel) override;
         void removeChannel(Channel* channel) override;
     private:
+        //初始化events_的大小
         static const int kInitEventListSize = 16;
         static const char* operationToString(int op);
         void fillActiveChannels(int numEvents,
@@ -36,8 +37,8 @@ namespace net
         void update(int operation, Channel* channel);
         using EventList = std::vector<epoll_event>;
         int epollfd_;
+        //已经发生的事件的组合
         EventList events_;
-
     };
     
     

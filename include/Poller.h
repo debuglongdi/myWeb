@@ -25,7 +25,7 @@ public:
     /// @param timeoutMs 超时时间
     /// @param activeChannels Poller监听的所有channel的vector
     /// @return 
-    virtual Timestamp* poll(int timeoutMs, ChannelList* activeChannels) = 0;
+    virtual Timestamp poll(int timeoutMs, ChannelList* activeChannels) = 0;
 
     /// @brief 改变 interested I/O events
     /// must called in the loop thread
