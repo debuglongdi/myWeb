@@ -67,11 +67,11 @@ namespace net
         static const int kReadEvent;
         static const int kWriteEvent;
 
-        EventLoop *loop_;//事件循环
+        EventLoop *loop_;//channel所在的事件循环
         const int fd_;//fd, 通道对象抽象的fd
         int events_;//注册fd感兴趣的事件
         int revents_;//返回的具体发生的事件
-        int index_;
+        int index_; //-1:未注册到poller中 1：注册到poller中，2：从poller中删除
 
         //与智能指针一起使用，防止循环引用
         std::weak_ptr<void> tie_;

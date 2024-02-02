@@ -79,7 +79,7 @@ void EpollPoller::updateChannel(Channel *channel)
     LOG_INFO("EpollPoller::updateChannel(), fd=%d events=%d index=%d \n", channel->fd(), channel->events(), channel->index());
     if (index == kNew || index == kDeleted)
     {
-        // 添加不存在epoll中得fd
+        // 添加不存在epoll中的fd
         if (index == kNew)
         {
             int fd = channel->fd();

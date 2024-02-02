@@ -15,6 +15,7 @@ class Channel;
 class Poller : noncopyable
 {
 public:
+    //装Channel的vector  
     using ChannelList = std::vector<Channel*>;
 
     explicit Poller(EventLoop * loop);

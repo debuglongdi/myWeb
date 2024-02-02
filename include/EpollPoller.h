@@ -37,7 +37,7 @@ namespace net
         void update(int operation, Channel* channel);
         using EventList = std::vector<epoll_event>;
         int epollfd_;
-        //已经发生的事件的组合
+        //已经发生的事件的集合
         EventList events_;
     };
     

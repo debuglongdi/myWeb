@@ -10,7 +10,8 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 # 生成库文件mymuduo_utils，第一个参数是我们希望生成的库的名字，后续是生成这个库所需要的所有源文件
 add_library(mymuduo_utils SHARED
         src/utils/Logger.cc 
-        src/utils/Timestamp.cc 
+        src/utils/Timestamp.cc
+        src/utils/CurrentThread.cc
         )
 
 # 生成库文件mymuduo_net，第一个参数是我们希望生成的库的名字，后续是生成这个库所需要的所有源文件
