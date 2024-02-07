@@ -2,7 +2,7 @@
 
 #include"noncopyable.h"
 #include<string>
-
+#define MYMUDUO_DEBUG
 //LOG_INFO("%s %d", arg1, arg2)
 #define LOG_INFO(logmsgFormat, ...) \
     do \
@@ -14,7 +14,7 @@
         logger.log(buf); \
     }while(0) \
 
-//LOG_INFO("%s %d", arg1, arg2)
+//LOG_ERROR("%s %d", arg1, arg2)
 #define LOG_ERROR(logmsgFormat, ...) \
     do \
     { \
@@ -25,7 +25,7 @@
         logger.log(buf); \
     }while(0) \
 
-//LOG_INFO("%s %d", arg1, arg2)
+//LOG_FATAL("%s %d", arg1, arg2)
 #define LOG_FATAL(logmsgFormat, ...) \
     do \
     { \
@@ -39,7 +39,7 @@
 
 #ifdef MYMUDUO_DEBUG
 
-//LOG_INFO("%s %d", arg1, arg2)
+//LOG_DEBUG("%s %d", arg1, arg2)
 #define LOG_DEBUG(logmsgFormat, ...) \
     do \
     { \

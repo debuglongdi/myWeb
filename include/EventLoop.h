@@ -31,7 +31,7 @@ public:
     //退出事件循环
     void quit();
 
-    Timestamp pollRetrunTime() const { return pollRetrunTime_; }
+    Timestamp pollRetrunTime() const { return pollReturnTime_; }
 
     //在当前loop中执行回调
     void runInLoop(Functor cb);
@@ -50,14 +50,15 @@ public:
     bool isInLoopThread() const { return threadId_ == CurrentThread::tid(); }
 
 private:
-    void handldRead();// wake up
+    //处理wakeupfd上的读事件
+    void handldRead();
     void doPendingFunctors();//执行回调
 
     std::atomic<bool> looping_;
     std::atomic<bool> quit_; //标识退出循环
     
     const pid_t threadId_; //记录loop所在的线程id
-    Timestamp pollRetrunTime_; //poller返回事件发生的时间点
+    Timestamp pollReturnTime_; //poller返回事件发生的时间点
     std::unique_ptr<Poller> poller_;
 
     //使用eventfd()系统调用
