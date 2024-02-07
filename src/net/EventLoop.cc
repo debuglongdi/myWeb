@@ -25,7 +25,6 @@ int createEventfd()
         LOG_FATAL("eventfd error %d\n", errno);
     }
     return evfd;
-
 }
 
 } // namespace
@@ -40,8 +39,10 @@ EventLoop::EventLoop()
     , wakeupFd_(createEventfd())
     , wakeupChannel_(new Channel(this, wakeupFd_))
     , currentActiveChannel_(nullptr)
-{
+{   
+#ifdef MYMUDUO_DEBUG
     LOG_DEBUG("EventLoop create %p in thread %d\n",this, threadId_);
+#endif
     if(t_loopInThisThread)
     {
         LOG_FATAL("Another EventLoop created %p in thread %d\n",t_loopInThisThread, threadId_);

@@ -7,6 +7,10 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
 #设置动态库输出文件
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
+#如果想要DEBUG的输出，需要定义MYMUDUO_DEBUG宏
+# add_compile_definitions(MYMUDUO_DEBUG)
+
+
 # 生成库文件mymuduo_utils，第一个参数是我们希望生成的库的名字，后续是生成这个库所需要的所有源文件
 add_library(mymuduo_utils SHARED
         src/utils/Logger.cc 
@@ -23,6 +27,7 @@ add_library(mymuduo_net SHARED
         src/net/EpollPoller.cc
         src/net/EventLoop.cc
         src/net/DefaultPoller.cc
+        src/source/Thread.cc
         )
 
 #########################################################################################
@@ -35,6 +40,8 @@ target_link_libraries(Logger_test mymuduo_utils)
 #生成第二个可执行文件
 add_executable(InetAddress_test src/test/InetAddress_test.cc)
 target_link_libraries(InetAddress_test mymuduo_net mymuduo_utils)
+
+
 
 #########################################################################################
 #########################################################################################

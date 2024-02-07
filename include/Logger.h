@@ -2,7 +2,6 @@
 
 #include"noncopyable.h"
 #include<string>
-#define MYMUDUO_DEBUG
 //LOG_INFO("%s %d", arg1, arg2)
 #define LOG_INFO(logmsgFormat, ...) \
     do \
