@@ -55,6 +55,7 @@ namespace sockets
         uint16_t toPort() const;
 
         const struct sockaddr* getSockAddr() const { return sockets::sockaddr_cast(&addr6_);}
+        void setSockAddr(const sockaddr_in addr){ addr_ = addr; }
 
         ~InetAddress() = default;
     };// end InetAddress

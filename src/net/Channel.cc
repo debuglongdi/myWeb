@@ -43,7 +43,7 @@ void Channel::tie(const std::shared_ptr<void> &obj)
 */
 void Channel::update()
 {
-    //通过channel所属的EventLoop,调用poller相应的方法，注册fd事件
+    //通过channel所属的EventLoop,调用poller相应的方法，注册fd事件,将channel加入到poller_中被监听
     loop_->updateChannel(this);
 }
 /**

@@ -30,6 +30,8 @@ add_library(mymuduo_net SHARED
         src/net/Thread.cc
         src/net/EventLoopThread.cc
         src/net/EventLoopThreadPool.cc
+        src/net/Socket.cc
+        src/net/Acceptor.cc
         )
 
 #########################################################################################
