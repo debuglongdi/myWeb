@@ -27,7 +27,9 @@ add_library(mymuduo_net SHARED
         src/net/EpollPoller.cc
         src/net/EventLoop.cc
         src/net/DefaultPoller.cc
-        src/source/Thread.cc
+        src/net/Thread.cc
+        src/net/EventLoopThread.cc
+        src/net/EventLoopThreadPool.cc
         )
 
 #########################################################################################
