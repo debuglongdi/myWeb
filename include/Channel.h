@@ -30,7 +30,8 @@ namespace net
         void setErrorCallback(EventCallBack cb)
         { errorCallback_ = std::move(cb); }
 
-        //得到Poller通知后，处理事件函数
+        /// Poller监听到channel上有事件发生后通知EventLoop，然后EventLoop调用channel的handleEvent事件处理函数
+        /// handleEvent会根据事件类型调用不同的处理函数
         void handleEvent(Timestamp receiveTime);
 
         //防止channel被手动销毁后，channel还在执行回调操作

@@ -38,7 +38,9 @@ public:
     bool disconnected() const { return state_ == kDisconnected; }
 
     //发送数据:c++11 void send(string&& message);
-    void send(const void* message, int len);
+    void send(const std::string& message);
+    // void sendInLoop(const void* data, size_t len);
+    // void send(const void* message, int len);
     //关闭当前连接
     void shutdown();
 
@@ -98,8 +100,8 @@ private:
 
     //水位线，超过水位线停止发送
     size_t highWaterMark_;
-    Buffer inputBuffer_;
-    Buffer outputBuffer_;
+    Buffer inputBuffer_; //接受数据的缓冲区
+    Buffer outputBuffer_;//发送数据的缓冲区
 };
     
 } // namespace net

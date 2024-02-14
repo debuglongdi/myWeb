@@ -6,6 +6,7 @@
 
 #include <functional>
 #include <memory>
+#include <string>
 
 using namespace mymuduo;
 using namespace mymuduo::net;
@@ -67,6 +68,7 @@ void TcpConnection::handleWrite()
     {
       if (outputBuffer_.readableBytes() == 0) // 数据发送完了
       {
+        //发送完数据，就对channel上的写就绪不感兴趣了，要设置disableWriting()
         channel_->disableWriting();
         if (writeCompleteCallback_)
         {
@@ -143,6 +145,86 @@ const char *TcpConnection::stateToString() const
     return "unknown state";
   }
 }
+
+void TcpConnection::send(const std::string& message)
+{
+  //已经连接上了，可以发送数据
+  if(state_ == kConnected)
+  {
+    if(loop_->isInLoopThread())
+    {
+      sendInLoop(message.c_str(), message.size());
+    }
+    else
+    {
+      loop_->runInLoop(std::bind(&TcpConnection::sendInLoop, this, message.c_str(), message.size()));
+    }
+  }
+}
+
+/**
+ * 发送数据，应用写得快，内核发送数据慢
+ * 需要将数据写入缓冲区，并设置水位回调
+*/
+void TcpConnection::sendInLoop(const void* data, size_t len)
+{
+  ssize_t nwrote = 0;//实际发送的数据
+  ssize_t remaining = len;//剩余未发送数据
+  bool faultError = false;
+  if(state_ == kDisconnected)
+  {
+    LOG_ERROR("TcpConnection::sendInLoop DISCONNECTED give up writing\n");
+    return;
+  }
+  //没有设置channel写就绪感兴趣且发送缓冲区没有数据，尝试直接发送
+  if(!channel_->isWriting() && outputBuffer_.readableBytes()==0)
+  {
+    nwrote = ::write(channel_->fd(), data, len);
+    if(nwrote >= 0)
+    {
+      remaining = len - nwrote;
+      //一次发送完了
+      if(remaining == 0 && writeCompleteCallback_)
+      {
+        loop_->runInLoop(std::bind(writeCompleteCallback_, shared_from_this()));
+      }
+    }
+    else //nwrote < 0,出现错误
+    {
+      if(errno != EWOULDBLOCK)
+      {
+        LOG_ERROR("TcpConnection::sendInLoop\n");
+        if(errno == EPIPE || errno == ECONNRESET)
+        {
+          faultError = true;
+        }
+      }
+    }
+  } // end if(!channel_->isWriting() && outputBuffer_.readableBytes()==0)
+
+  //还有数据未发送完
+  if(!faultError && remaining > 0)
+  {
+    //缓冲区的未发送数据长度（可读数据区）
+    size_t oldLen = outputBuffer_.readableBytes();
+    if(oldLen + remaining >= highWaterMark_ //待发送数据长度大于等于设置的高水位标志
+       && oldLen < highWaterMark_ // 且原本的数据长度是小于高水位标志的
+       && highWaterMarkCallback_) // 如果设置了高水位回调
+    {
+      //执行高水位回调
+      loop_->queueInLoop(std::bind(highWaterMarkCallback_, shared_from_this(), oldLen + remaining));
+    }
+    //将数据添加到待发送的缓冲区,并设置对channel_的写就绪感兴趣
+    //这样poller会在channel_写就绪时通知channel_执行handleWrite()回调（LT模式，只要写就绪就不停通知）
+    outputBuffer_.append((char*)data + nwrote, remaining);
+    if(!channel_->isWriting())
+    {
+      channel_->enableWriting();
+    }
+  }
+
+}
+
 
 void TcpConnection::shutdownInLoop()
 {
