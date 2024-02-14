@@ -53,26 +53,41 @@
 
 namespace mymuduo
 {
-    enum LogLevl
-    {
-        INFO, //普通信息
-        ERROR, //错误信息
-        FATAL, //core信息
-        DEBUG, //调试信息
-    };
+enum LogLevl
+{
+    INFO, //普通信息
+    ERROR, //错误信息
+    FATAL, //core信息
+    DEBUG, //调试信息
+};
 
-    //sigleton模式
-    class Logger : noncopyable
-    {
-    public:
-        //获取日志实例
-        static Logger& getInstance();
-        //设置日志级别
-        void setLogLevel(int level);
-        //写日志
-        void log(const std::string msg);
-    private:
-        Logger() = default;
-        int loglevel_;
-    };
+//sigleton模式
+class Logger : noncopyable
+{
+public:
+    //获取日志实例
+    static Logger& getInstance();
+    //设置日志级别
+    void setLogLevel(int level);
+    //写日志
+    void log(const std::string msg);
+private:
+    Logger() = default;
+    int loglevel_;
+};
+
+#define CHECK_NOTNULL(val) \
+  ::mymuduo::CheckNotNull((val))
+
+// A small helper for CHECK_NOTNULL().
+template <typename T>
+T* CheckNotNull(T* ptr)
+{
+  if (ptr == nullptr)
+  {
+    LOG_FATAL("%s:%s:%d PTR MUST BE NOT nullptr\n",__FILE__,__FUNCTION__,__LINE__);
+  }
+  return ptr;
 }
+
+} //edn mymuduo

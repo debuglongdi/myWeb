@@ -15,12 +15,12 @@ class InetAddress;
 class Acceptor : noncopyable
 {
 public:
-    using NewConnectionCallback = std::function<void(int sockfd, const InetAddress& addr)>;
+    using NewConnectionCallback = std::function< void(int, const InetAddress &) >;
     Acceptor(EventLoop* loop, const InetAddress& listenAddr, bool reuseport);
     ~Acceptor();
-    void setNewConnectionCallback(NewConnectionCallback &cb)
+    void setNewConnectionCallback(const NewConnectionCallback &cb)
     {
-        newConnectionCallback_ = std::move(cb);
+        newConnectionCallback_ = cb;
     }
     void listen();
     bool listenning() const { return listenning_; }

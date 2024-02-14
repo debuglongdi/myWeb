@@ -13,7 +13,7 @@ namespace
 {
 int createNonBlocking()
 {
-    //创建非阻塞的套接字
+    //创建非阻塞的套接字，可以用0
     int sockfd = ::socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC, IPPROTO_TCP);
     if(sockfd < 0)
     {
@@ -51,7 +51,6 @@ void Acceptor::listen()
     acceptSocket_.listen();
     //mainLoop使用poller监听该套接字上的读事件，若有读事件，那就有新用户连接上了
     acceptChannel_.enableReading();
-
 }
 void Acceptor::handleRead()
 {
@@ -73,6 +72,7 @@ void Acceptor::handleRead()
     else
     {
         LOG_ERROR("%s:%s:%d Acceptor::handleRead() error\n",__FILE__,__FUNCTION__, __LINE__);
+        //文件描述符限制
         if(errno == EMFILE)
         {
             LOG_ERROR("%s:%s:%d fd limit reached! error\n",__FILE__,__FUNCTION__, __LINE__);
