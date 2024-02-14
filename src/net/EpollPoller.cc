@@ -152,11 +152,11 @@ void EpollPoller::update(int operation, Channel *channel)
     {
         if (operation == EPOLL_CTL_DEL)
         {
-            LOG_ERROR("epoll_ctl del\n");
+            LOG_ERROR("epoll_ctl del error \n");
         }
         else
         {
-            LOG_FATAL("epoll_ctl add/mod\n");
+            LOG_FATAL("epoll_ctl add/mod error \n");
         }
     }
 }

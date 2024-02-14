@@ -68,6 +68,9 @@ private:
     enum StateE{
         kDisconnected,kConnecting,kConnected, kDisconnecting
     };
+    //设置状态码
+    void setState(StateE s) { state_ = s; }
+    
     void handleRead(Timestamp reciveTime);
     void handleWrite();
     void handleClose();
@@ -75,8 +78,7 @@ private:
 
     void sendInLoop(const void* message, size_t len);
     void shutdownInLoop();
-    //设置状态码
-    void setState(StateE s) { state_ = s; }
+    
 
     const char* stateToString() const;
 

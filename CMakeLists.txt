@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.16)
 project(mymuduo)
 
+# 设置调试信息 以及启动c++11语言标准
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++11")
+
 # 添加包含文件，为了使得我们编写的 .cpp 源文件能够使用在不同目录里的包含文件
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
 

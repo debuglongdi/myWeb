@@ -29,6 +29,7 @@ Channel::~Channel()
 
 /**
  * tie什么时候被调用？
+ * 一个TcpConnection新连接创建时，调用void TcpConnection::connectEstablished()
 */
 void Channel::tie(const std::shared_ptr<void> &obj)
 {
