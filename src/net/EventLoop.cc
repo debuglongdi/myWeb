@@ -55,6 +55,8 @@ EventLoop::EventLoop()
     wakeupChannel_->setReadCallback(
         std::bind(&EventLoop::handldRead, this)
     );
+    //每个loop线程都监听自己的wakeupFd的读事件，该fd是eventfd，专门用来通信的，写数据和读书据都很快
+    //这样其他的线程可以向该fd写数据来让该线程立刻启动，不然一般它都在阻塞等待监听的channel有就绪事件发生或者超时
     wakeupChannel_->enableReading();
 }
 EventLoop::~EventLoop()

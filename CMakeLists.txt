@@ -44,12 +44,12 @@ add_library(mymuduo_net SHARED
 #########################################################################################
 
 #生成第一个可执行文件
-add_executable(Logger_test src/test/Logger_test.cc)
-target_link_libraries(Logger_test mymuduo_utils)
+# add_executable(Logger_test src/test/Logger_test.cc)
+# target_link_libraries(Logger_test mymuduo_utils)
 
-#生成第二个可执行文件
-add_executable(InetAddress_test src/test/InetAddress_test.cc)
-target_link_libraries(InetAddress_test mymuduo_net mymuduo_utils)
+# #生成第二个可执行文件
+# add_executable(InetAddress_test src/test/InetAddress_test.cc)
+# target_link_libraries(InetAddress_test mymuduo_net mymuduo_utils)
 
 
 

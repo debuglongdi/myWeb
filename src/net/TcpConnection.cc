@@ -107,7 +107,7 @@ void TcpConnection::handleClose()
     //  {
     //    LOG_ERROR("you need set closeCallback_\n");
     //  }
-    if (closeCallback_)
+    if (closeCallback_)//TcpServe设置的断开连接的回调
     {
         closeCallback_(conn);
     }

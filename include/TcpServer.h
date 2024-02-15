@@ -46,9 +46,11 @@ public:
     //开启服务器监听
     void start();
 
-    //设置回调
+    
+    //设置线程初始化回调，（我认为要让每一个工作线程（subloop）监听自己的wakeupFd，这样就可以被mainloop唤醒了）
     void setThreadInitCallback(const ThreadInitCallback& cb)
     { threadInitCallback_ = cb; }
+    //设置回调
     void setConnectionCallback(const ConnectionCallback &cb)
     { connectionCallback_ = cb; }
     void setMessageCallback(const MessageCallback &cb)
