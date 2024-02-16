@@ -7,6 +7,7 @@
 #include <sys/epoll.h>
 #include <unistd.h>
 #include <string.h>
+#include <CurrentThread.h>
 
 using namespace mymuduo;
 using namespace mymuduo::net;
@@ -38,7 +39,7 @@ EpollPoller::~EpollPoller()
 
 Timestamp EpollPoller::poll(int timeoutMs, ChannelList *activeChannels)
 {
-    LOG_INFO("EpollPoller::poll(), func=%s\n", __FUNCTION__);
+    LOG_INFO("tid=%d EpollPoller::poll(), func=%s\n",CurrentThread::tid(), __FUNCTION__);
     //阻塞等待感兴趣的事件发生或者超时返回
     int numEvents = epoll_wait(epollfd_,
                                 &*events_.begin(),
@@ -51,7 +52,7 @@ Timestamp EpollPoller::poll(int timeoutMs, ChannelList *activeChannels)
         LOG_INFO("envets happend\n");
         fillActiveChannels(numEvents, activeChannels);
 
-        if(numEvents == events_.size())
+        if(numEvents == (int)events_.size())
         {
             //可能发生的事件较多，给数组vector扩容
             events_.resize(events_.size() * 2);
@@ -91,7 +92,7 @@ void EpollPoller::updateChannel(Channel *channel)
     else
     {
         // 更新存在epoll中的fd
-        int fd = channel->fd();
+        // int fd = channel->fd();
         // 如果对所有事件都不感兴趣，从epollfd上删除之（不从channels_上移除）
         if (channel->isNonEvent())
         {
@@ -144,7 +145,7 @@ void EpollPoller::update(int operation, Channel *channel)
     struct epoll_event event;
     memset(&event, 0, sizeof(event));
     int fd = channel->fd();
-    int index = channel->index();
+    // int index = channel->index();
     // 执行epoll_ctl op
     event.events = channel->events();
     event.data.ptr = channel;

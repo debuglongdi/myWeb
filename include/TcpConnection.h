@@ -82,17 +82,29 @@ private:
 
     const char* stateToString() const;
 
+/**
+ * : loop_(CHECK_NOTNULL(loop))
+ * , name_(name)
+ * , socket_(new Socket(sockfd))
+ * , channel_(new Channel(loop, sockfd))
+ * , localAddr_(localAddr)
+ * , peerAddr_(peerAddr)
+ * , state_(kConnecting)
+ * , reading_(true)
+ * , highWaterMark_(64 * 1024 * 1024)
+*/
     EventLoop* loop_;
     const std::string name_;
-    //枚举类型
-    std::atomic_int state_;
-    bool reading_;
-
     std::unique_ptr<Socket> socket_;
     std::unique_ptr<Channel> channel_;
     const InetAddress localAddr_;
     const InetAddress peerAddr_ ;
-
+    //枚举类型
+    std::atomic_int state_;
+    bool reading_;
+    //水位线，超过水位线停止发送
+    size_t highWaterMark_;
+    
     //一些回调函数
     ConnectionCallback connectionCallback_;
     MessageCallback messageCallback_;
@@ -100,8 +112,6 @@ private:
     HighWaterMarkCallback highWaterMarkCallback_;
     CloseCallback closeCallback_;
 
-    //水位线，超过水位线停止发送
-    size_t highWaterMark_;
     Buffer inputBuffer_; //接受数据的缓冲区
     Buffer outputBuffer_;//发送数据的缓冲区
 };

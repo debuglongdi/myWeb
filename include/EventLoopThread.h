@@ -4,12 +4,17 @@
 #include <mutex>
 #include <condition_variable>
 #include <functional>
+#include "Logger.h"
 
+
+//
 namespace mymuduo
 {
 namespace net
 {
 class EventLoop;
+
+
 class EventLoopThread : noncopyable
 {
 public:
@@ -22,13 +27,14 @@ public:
 private:
     //开启Thread新线程要做的事
     void threadFunc();
+
+private:
     EventLoop* loop_;
     bool exiting_;
     Thread thread_;
     std::mutex mutex_;
     std::condition_variable cond_;
     ThreadInitCallback callback_;
-
 };
 
 } // namespace net

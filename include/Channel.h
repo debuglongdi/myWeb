@@ -1,6 +1,6 @@
 #pragma once
-#include "../include/noncopyable.h"
-#include "../include/Timestamp.h"
+#include "noncopyable.h"
+#include "Timestamp.h"
 #include <functional>
 #include <memory>
 

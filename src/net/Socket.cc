@@ -34,9 +34,11 @@ void Socket::listen()
 int Socket::accept(InetAddress* peeraddr)
 {
     sockaddr_in addr;
-    socklen_t len;
+    //初始化len的大小
+    socklen_t len = sizeof addr;
+    //addr置0
     bzero(&addr, sizeof addr);
-    int connfd = ::accept(sockfd_,(sockaddr*) &addr, &len);
+    int connfd = ::accept4(sockfd_,(sockaddr*) &addr, &len, SOCK_NONBLOCK | SOCK_CLOEXEC);
     if(connfd >= 0)
     {
         peeraddr->setSockAddr(addr);
@@ -59,20 +61,36 @@ void Socket::setTcpNoDelay(bool on)
 {
     int optval = on?1:0;
     int ret = ::setsockopt(sockfd_, IPPROTO_TCP, TCP_NODELAY, &optval,sizeof optval);
+    if(ret < 0)
+    {
+        LOG_FATAL("Socket::setTcpNoDelay\n");
+    }
 
 }
 void Socket::setReuseAddr(bool on)
 {
     int optval = on?1:0;
     int ret = ::setsockopt(sockfd_, SOL_SOCKET, SO_REUSEADDR,&optval,static_cast<socklen_t> (sizeof optval));
+    if(ret < 0)
+    {
+        LOG_FATAL("Socket::setReuseAddr\n");
+    }
 }
 void Socket::setReusePort(bool on)
 {
     int optval = on?1:0;
     int ret = ::setsockopt(sockfd_, SOL_SOCKET, SO_REUSEPORT,&optval,sizeof optval);
+    if(ret < 0)
+    {
+        LOG_FATAL("Socket::setReusePort(bool on)\n");
+    }
 }
 void Socket::setKeepAlive(bool on)
 {
     int optval = on?1:0;
     int ret = ::setsockopt(sockfd_, SOL_SOCKET, SO_KEEPALIVE,&optval,sizeof optval);
+    if(ret < 0)
+    {
+        LOG_FATAL("Socket::setKeepAlive(bool on)\n");
+    }
 }

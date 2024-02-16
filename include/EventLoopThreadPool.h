@@ -4,7 +4,9 @@
 #include <vector>
 #include <memory>
 #include <functional>
+#include "Logger.h"
 
+//
 namespace mymuduo
 {
 namespace net
@@ -16,18 +18,23 @@ class EventLoopThreadPool : noncopyable
 {
 public:
     using ThreadInitCallback = std::function<void(EventLoop*)>;
-    EventLoopThreadPool(EventLoop* baseLoop, std::string nameArg);
+    EventLoopThreadPool(EventLoop* baseLoop, const std::string &nameArg);
     ~EventLoopThreadPool();
     //设置线程池数量（不包括mainLoop）
     void setThreadNum(int numThread){ numThreads_ = numThread; }
     //开启所有线程池种的EventLoop
     void start(const ThreadInitCallback &cb = ThreadInitCallback());
+
     //使用轮询获取下一个EventLoop
     EventLoop* getNextLoop();
+
     //获取所有的线程的EventLoop
     std::vector<EventLoop*> getAllLoop();
+
+    bool started() const { return started_; }
+    const std::string& name() { return name_; }
 private:
-    //用户创建mainLoop
+    //用户创建的mainLoop
     EventLoop* baseLoop_;
     std::string name_;
     bool started_;

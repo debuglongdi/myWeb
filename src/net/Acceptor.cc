@@ -57,6 +57,10 @@ void Acceptor::handleRead()
     InetAddress peerAddr;
     //接受一个连接
     int connfd = acceptSocket_.accept(&peerAddr);
+    /**1.accept参数不合法
+     * 2.需要设置connfd为非阻塞的fd
+     * reactor one loop per thread
+    */
     if(connfd >= 0)
     {
         if(newConnectionCallback_)

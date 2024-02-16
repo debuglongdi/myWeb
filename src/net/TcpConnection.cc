@@ -93,8 +93,11 @@ void TcpConnection::handleWrite()
 }
 void TcpConnection::handleClose()
 {
-    LOG_INFO("fd=%d state=%s\n", channel_->fd(), stateToString());
+    LOG_INFO("TcpConnection::handleClose() fd=%d state=%s\n", channel_->fd(), stateToString());
     setState(kDisconnected);
+    //要处理关闭，就对所有的事都不感兴趣了
+    //不disableAll()它就会不停的上报知道TcpConnection析构
+    channel_->disableAll();
     TcpConnectionPtr conn(shared_from_this());
 
     // 连接断开回调
@@ -107,7 +110,7 @@ void TcpConnection::handleClose()
     //  {
     //    LOG_ERROR("you need set closeCallback_\n");
     //  }
-    if (closeCallback_)//TcpServe设置的断开连接的回调
+    if (closeCallback_)//调用TcpServe设置的断开连接的回调
     {
         closeCallback_(conn);
     }

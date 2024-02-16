@@ -13,7 +13,7 @@ namespace
 //防止一个线程创建多个EventLoop
 __thread EventLoop* t_loopInThisThread = nullptr;
 //设置默认超时时间
-const int kPollTimeMs = 100000;
+const int kPollTimeMs = 10000;
 
 //创建wakeupfd,用来notify(唤醒)subRecator
 int createEventfd()
@@ -33,12 +33,12 @@ int createEventfd()
 EventLoop::EventLoop()
     : looping_(false)
     , quit_(false)
-    , callingPendingFunctors_(false)
     , threadId_(CurrentThread::tid())
     , poller_(Poller::newDefaultPoller(this))
     , wakeupFd_(createEventfd())
     , wakeupChannel_(new Channel(this, wakeupFd_))
     , currentActiveChannel_(nullptr)
+    , callingPendingFunctors_(false)
 {   
 #ifdef MYMUDUO_DEBUG
     LOG_DEBUG("EventLoop create %p in thread %d\n",this, threadId_);

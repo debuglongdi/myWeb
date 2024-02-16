@@ -5,6 +5,8 @@
 #include "Acceptor.h"
 #include "EventLoopThreadPool.h"
 #include "Callbacks.h"
+#include "TcpConnection.h"
+
 #include <functional>
 #include <atomic>
 #include <unordered_map>
@@ -69,6 +71,18 @@ private:
 
     using ConnectionMap = std::unordered_map<std::string, TcpConnectionPtr>;
 
+
+/**
+ * : loop_(CHECK_NOTNULL(loop))
+ * , ipPort_(listenAddr.toIpPort())
+ * , name_(nameArg)
+ * , acceptor_(new Acceptor(loop, listenAddr, option == kReusePort))
+ * , threadPool_(new EventLoopThreadPool(loop, name_))
+ * , connectionCallback_()
+ * , messageCallback_()
+ * , nextConnId_(1)
+ * , started_(0)
+ * */ 
     EventLoop* loop_;//用户定义的loop
     const std::string ipPort_;
     const std::string name_;
@@ -83,9 +97,11 @@ private:
     WriteCompleteCallback writeCompleteCallback_;
     //线程初始化回调
     ThreadInitCallback threadInitCallback_;
+    
+    int nextConnId_;
     std::atomic_int started_;
 
-    int nextConnId_;
+
     //保存所有的连接
     ConnectionMap connections_;
 

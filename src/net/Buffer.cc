@@ -32,7 +32,7 @@ ssize_t Buffer::readFd(int fd, int* saveErrno)
     {
         *saveErrno = errno;
     }
-    else if(n <= writeable)//可写的区间足够存储从fd中读取的数据
+    else if(n <= (ssize_t)writeable)//可写的区间足够存储从fd中读取的数据
     {
         //更新边界
         writeIndex_ +=n;

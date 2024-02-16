@@ -6,7 +6,9 @@
 #include <string>
 #include <atomic>
 #include <unistd.h>
+#include "Logger.h"
 
+//
 namespace mymuduo
 {
 class Thread : noncopyable
@@ -32,6 +34,6 @@ private:
     ThreadFunc func_;
     std::shared_ptr<std::thread> thread_;
     std::string name_;
-    static std::atomic<int> numCreated_;
+    static std::atomic_int numCreated_;
 };
 } // namespace mymudo

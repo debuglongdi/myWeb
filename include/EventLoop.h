@@ -58,8 +58,9 @@ private:
     std::atomic<bool> quit_; //标识退出循环
     
     const pid_t threadId_; //记录loop所在的线程id
-    Timestamp pollReturnTime_; //poller返回事件发生的时间点
     std::unique_ptr<Poller> poller_;
+    Timestamp pollReturnTime_; //poller返回事件发生的时间点
+    
 
     //使用eventfd()系统调用
     int wakeupFd_;//当mainLoop获取一个新用户的channel,通过轮询算法选择一个subloop(woker thread),通过改变量唤醒subloop处理
