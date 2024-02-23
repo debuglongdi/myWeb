@@ -45,10 +45,10 @@ public:
         }
         else // len == readableBytes()
         {
-            retriveAll();
+            retrieveAll();
         }
     }
-    void retriveAll()
+    void retrieveAll()
     {
         //readIndex_ = writeIndex_ 复位说明缓冲区空闲了可一用来写
         readIndex_ = writeIndex_ = kCheapPrepend;

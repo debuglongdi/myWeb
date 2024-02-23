@@ -165,6 +165,24 @@ void TcpConnection::send(const std::string &message)
     }
 }
 
+// FIXME efficiency!!!
+void TcpConnection::send(Buffer* buf)
+{
+
+  if (state_ == kConnected)
+  {
+    if (loop_->isInLoopThread())
+    {
+      sendInLoop(buf->peek(), buf->readableBytes());
+      buf->retrieveAll();
+    }
+    else
+    {
+      loop_->runInLoop(std::bind(&TcpConnection::sendInLoop, this, buf->peek(), buf->readableBytes()));
+    }
+  }
+}
+
 /**
  * 发送数据，应用写得快，内核发送数据慢
  * 需要将数据写入缓冲区，并设置水位回调

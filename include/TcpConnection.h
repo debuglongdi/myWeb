@@ -39,6 +39,7 @@ public:
 
     //发送数据:c++11 void send(string&& message);
     void send(const std::string& message);
+    void send(Buffer* buf);
     // void sendInLoop(const void* data, size_t len);
     // void send(const void* message, int len);
     //关闭当前连接
