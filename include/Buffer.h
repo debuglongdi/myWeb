@@ -81,7 +81,7 @@ public:
         }
     }
 
-    /// @brief 将数据添加到可写的缓冲区
+    /// @brief 将数据添加到可写的缓冲区，从后面添加
     /// @param data 
     /// @param len 
     void append(const char* data, size_t len)
@@ -90,6 +90,18 @@ public:
         std::copy(data, data+len, beginWrite());
         writeIndex_ +=len;
     }
+
+     /// @brief 在buff前面添加数据
+     /// @param data 
+     /// @param len 
+     void prepend(const void* /*restrict*/ data, size_t len)
+    {
+        // assert(len <= prependableBytes());
+        readIndex_ -= len;
+        const char* d = static_cast<const char*>(data);
+        std::copy(d, d+len, begin()+readIndex_);
+    }
+
     char* beginWrite()
     {
         return begin() + writeIndex_;
