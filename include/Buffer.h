@@ -23,6 +23,9 @@ public:
                     , readIndex_(kCheapPrepend)
                     , writeIndex_(kCheapPrepend)
     {}
+    size_t readIDX() const { return readIndex_; }
+    size_t writeIDX() const { return writeIndex_; }
+    size_t bufferSize() const { return buffer_.size(); }
     //可读的数据大小
     size_t readableBytes() const { return writeIndex_ - readIndex_; }
     //可写的区间的大小
@@ -94,7 +97,7 @@ public:
      /// @brief 在buff前面添加数据
      /// @param data 
      /// @param len 
-     void prepend(const void* /*restrict*/ data, size_t len)
+    void prepend(const void* /*restrict*/ data, size_t len)
     {
         // assert(len <= prependableBytes());
         readIndex_ -= len;

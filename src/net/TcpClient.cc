@@ -133,6 +133,7 @@ void TcpClient::newConnection(int sockfd)
     std::string connName = name_ + buf;
     // FIXME poll with zero timeout to double confirm the new connection
     // FIXME use make_shared if necessary
+    LOG_INFO("local=%s perraddr=%s\n",localAddr.toIpPort().c_str(), peerAddr.toIpPort().c_str());
     TcpConnectionPtr conn(new TcpConnection(loop_,
                                             connName,
                                             sockfd,

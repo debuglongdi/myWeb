@@ -2,7 +2,7 @@
 #include <mymuduo/Logger.h>
 #include <string>
 #include <mymuduo/Thread.h>
-#include <string>
+// #include <mymuduo/codec.h>
 
 using namespace mymuduo;
 using namespace mymuduo::net;
@@ -26,7 +26,7 @@ public:
             std::bind(&EchoServer::onConnection,this,std::placeholders::_1)
         );
         server_.setMessageCallback(
-            std::bind(&EchoServer::onMessage,this, _1,_2,_3)
+            std::bind(&EchoServer::onMessage,this, _1,_2,_3)//先执行A,在执行B
         );
         //设置合适的线程数量
         server_.setThreadNum(3);
@@ -51,12 +51,11 @@ private:
     }
     //可读写事件的回调
     void onMessage(const TcpConnectionPtr &conn,
-                    Buffer *buf,
-                    Timestamp time)
+                Buffer *msg,
+                Timestamp time)
     {
-        std::string msg = buf->retriveAllAsString();
+        //echo server
         conn->send(msg);
-        // conn->shutdown();//关闭写端 EPOLLHUP
     }
     EventLoop *loop_;
     TcpServer server_;

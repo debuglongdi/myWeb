@@ -13,7 +13,7 @@ namespace
 //防止一个线程创建多个EventLoop
 __thread EventLoop* t_loopInThisThread = nullptr;
 //设置默认超时时间
-const int kPollTimeMs = 10000;
+const int kPollTimeMs = 60000;
 
 //创建wakeupfd,用来notify(唤醒)subRecator
 int createEventfd()

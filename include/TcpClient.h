@@ -1,6 +1,7 @@
 #pragma once 
 #include "noncopyable.h"
 #include "TcpConnection.h"
+#include "Connector.h"
 #include <functional>
 #include <memory>
 #include <mutex>
@@ -9,7 +10,7 @@ namespace mymuduo
 {
 namespace net
 {
-class Connector;
+// class Connector;
 using ConnectorPtr = std::shared_ptr<Connector>;
 class TcpClient : noncopyable
 {
@@ -39,11 +40,11 @@ public:
     ///set connection callback
     ///not thread safe
     void setConnectionCallback(const ConnectionCallback &cb)
-    { connectionCallback_ = std::move(cb); }
+    { connectionCallback_ = cb; }
     void setMessageCallback(const MessageCallback &cb)
-    { messageCallback_ = std::move(cb); }
+    { messageCallback_ = cb; }
     void setWriteCompleteCallback(const WriteCompleteCallback &cb)
-    { writeCompleteCallback_ = std::move(cb); }
+    { writeCompleteCallback_ = cb; }
 
 
 

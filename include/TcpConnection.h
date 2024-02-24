@@ -38,6 +38,7 @@ public:
     bool disconnected() const { return state_ == kDisconnected; }
 
     //发送数据:c++11 void send(string&& message);
+    //fix: Sending data results in the loss of the first byte don't use
     void send(const std::string& message);
     void send(Buffer* buf);
     // void sendInLoop(const void* data, size_t len);

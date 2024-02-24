@@ -5,9 +5,13 @@ CC := g++
 CFLAGS := -g3 -O0 -Wall 
 LIBS := -lmymuduo_utils -lmymuduo_net -lpthread
 
+all: server client
 
-myserver :
-	$(CC) -o myserver testServer.cc $(CFLAGS) $(LIBS)
+server :
+	$(CC) -o server testServer.cc $(CFLAGS) $(LIBS)
+
+client :
+	$(CC) -o client testClient.cc $(CFLAGS) $(LIBS)
 
 clean :
-	rm -f myserver *.o
+	rm -f *.o server client

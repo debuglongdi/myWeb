@@ -156,10 +156,12 @@ void TcpConnection::send(const std::string &message)
     {
         if (loop_->isInLoopThread())
         {
+            // printf("inloop: TcpConnection::send SEND MESSAGE=%s len=%d\n",message.data(),message.size());
             sendInLoop(message.c_str(), message.size());
         }
         else
         {
+            // printf("TcpConnection::send SEND MESSAGE=%s len=%d\n",message.data(),message.size());
             loop_->runInLoop(std::bind(&TcpConnection::sendInLoop, this, message.c_str(), message.size()));
         }
     }

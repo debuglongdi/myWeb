@@ -2,10 +2,14 @@
 #include <sys/types.h>          /* See NOTES */
 #include <sys/socket.h>
 #include "SockOps.h"
+#include <thread>
 
 using namespace mymuduo;
 using namespace mymuduo::net;
 
+// 在类的实现文件中
+const int mymuduo::net::Connector::kMaxRetryDelayMs;
+const int mymuduo::net::Connector::kInitRetryDelayMs;
 
 int createNonBlocking()
 {
@@ -65,6 +69,7 @@ void Connector::connect()
     case EINPROGRESS:
     case EINTR:
     case EISCONN:
+      LOG_ERROR("========================connected===================================\n");
       connecting(sockfd);
       break;
 
@@ -73,6 +78,7 @@ void Connector::connect()
     case EADDRNOTAVAIL:
     case ECONNREFUSED:
     case ENETUNREACH:
+      LOG_ERROR("=============================retry==================================\n");
       retry(sockfd);
       break;
 
@@ -98,6 +104,9 @@ void Connector::connect()
 void Connector::connecting(int sockfd)
 {
     //重新设置channel
+    LOG_ERROR("========================the server has been connected===================================\n");
+    //设置已经连接了
+    setStates(kConnecting);
     channel_.reset(new Channel(loop_, sockfd));
     channel_->setWriteCallback(
         std::bind(&Connector::handleWrite, shared_from_this())
@@ -179,6 +188,8 @@ void Connector::retry(int sockfd)
     if (connect_)
     {
         LOG_INFO("Connector::retry - Retry connecting to %s in  %d milliseconds. \n",serverAddr_.toIpPort().c_str(), retryDelayMs_);
+        //TODO 设置超时重试
+        std::this_thread::sleep_for(std::chrono::milliseconds(50000));
         loop_->runInLoop(std::bind(&Connector::startInLoop, shared_from_this()));//这个是错误的
         retryDelayMs_ = std::min(retryDelayMs_ * 2, kMaxRetryDelayMs);
     }
