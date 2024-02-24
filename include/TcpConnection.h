@@ -46,7 +46,8 @@ public:
     void shutdown();
 
     // void shutdownInLoop();
-
+    void forceClose();
+    void forceCloseInLoop();
     //设置callback;
     void setConnectionCallback(const ConnectionCallback &cb)
     { connectionCallback_ = cb; }

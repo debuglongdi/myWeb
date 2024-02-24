@@ -41,6 +41,7 @@ add_library(mymuduo_net SHARED
         src/net/TcpConnection.cc
         src/net/Buffer.cc
         src/net/Connector.cc
+        src/net/TcpClient.cc
         )
 
 #########################################################################################

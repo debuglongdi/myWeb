@@ -296,3 +296,22 @@ void TcpConnection::shutdownInLoop()
     //当channel可以发送时，handleWrite()会被调用，就可将数据发送完。并且在状态为kDisconnecting时会再一次调用shutdownInLoop()
     //最终fd的写端被关闭了
 }
+
+
+void TcpConnection::forceClose()
+{
+    if (state_ == kConnected || state_ == kDisconnecting)
+    {
+        setState(kDisconnecting);
+        loop_->queueInLoop(std::bind(&TcpConnection::forceCloseInLoop, shared_from_this()));
+    }
+}
+
+void TcpConnection::forceCloseInLoop()
+{
+  if (state_ == kConnected || state_ == kDisconnecting)
+  {
+    // as if we received 0 byte in handleRead();
+    handleClose();
+  }
+}
