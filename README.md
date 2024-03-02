@@ -21,18 +21,24 @@
 
 ## 三、核心代码梳理
 
-### 集群和分布式
-### RPC通信原理
-###
-###
-###
-###
-###
+```
+使用组合而不是使用继承来实现新功能
+```
+
+### Channel
+### Poller EpollPoller
+### EventLoop
+### Thread EventLoopThread EventLoopThreadPool
+### Buffer
+### Socket Acceptor
+### TcpConnection
+### TcpServer
+
 
 
 ## 四、基于重构的muduo网络库实现一个echo服务器，并进行性能测试
 
-### benchmar
+### benchmark
 ### Jemeter
 
 ## 五、总结
